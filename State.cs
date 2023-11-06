@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Newtonsoft.Json;
 public class State
 {   
  
@@ -15,8 +15,6 @@ public class State
     // public Dictionary<string, Quaternion> wheelQuaternion { get; set; }
     // public Vector3 targetPosition { get; set; }
     // public Vector3 pathPositionClosest { get; set; }
-    // public Vector3 pathPositionSecondClosest { get; set; }
-    // public Vector3 pathPositionFarthest { get; set; }
     public Vector3 carPosition { get; set; }
     // public Vector3 carVelocity { get; set; }
     // public Vector3 carAugularVelocity { get; set; }
@@ -48,9 +46,11 @@ public class State
     public Quaternion ROS2WheelQuaternionLeftFront { get; set; }
     public Quaternion ROS2WheelQuaternionRightBack { get; set; }
     public Quaternion ROS2WheelQuaternionRightFront { get; set; }
-    public float ROS2MinRange { get; set; }
+    // public float ROS2MinRange { get; set; }
+    public float[] ROS2Range { get; set; }
     // public Vector3 ROS2MinRangeDirection { get; set; }
-    public Vector3 ROS2MinRangePosition { get; set; }
+    public Vector3[] ROS2RangePosition { get; set; }
+    
     
 
     void Awake()

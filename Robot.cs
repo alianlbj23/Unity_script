@@ -4,10 +4,10 @@ using UnityEngine;
 using System;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Geometry;
+using System.Linq;
 
 public class Robot : MonoBehaviour
 {   
-
 
     public struct Action {
         public List<float> voltage;
@@ -72,28 +72,17 @@ public class Robot : MonoBehaviour
         // Vector3 angVRF = wheelM[3].AngularV;
         // Quaternion qLF = wheelBaseM[0].q;
         // Quaternion qRF = wheelBaseM[1].q;
-        float range = lidar.GetMinRange();
-        // Debug.Log("min range: " + range);
-
-        Vector3 rangeDirection = lidar.GetMinRangeDirection();
-
+        List<float> range = lidar.GetRange();
+        
+        var rangeDirection = lidar.GetRangeDirection(); //list
+        for(int i = 0; i < rangeDirection.Count; i++){
+            rangeDirection[i] = ToRosVec(rangeDirection[i]);
+        }
+        
         State ROS2State = new State(){
-            // targetPosition = newTarget,
-            // pathPositionClosest = new Vector3(0,0,0),
-            // pathPositionSecondClosest = new Vector3(0,0,0),
-            // pathPositionFarthest = new Vector3(0,0,0),
+
             carPosition = carPos,
-            // carVelocity = carVel,
-            // carAugularVelocity = carAngV,
-            // carQuaternion = carQ,
-            // wheelAngularVelocityLeftBack = angVLB,
-            // wheelAngularVelocityLeftFront = angVLF,
-            // wheelAngularVelocityRightBack = angVRB,
-            // wheelAngularVelocityRightFront = angVRF,
-            // wheelQuaternionLeftFront = qLF,
-            // wheelQuaternionRightFront = qRF,
-            // minRange = range,
-            // minRangeDirection = rangeDirection,
+ 
 
             ROS2TargetPosition = ToRosVec(newTarget),
             ROS2PathPositionClosest = new Vector3(0,0,0),
@@ -109,25 +98,15 @@ public class Robot : MonoBehaviour
             // ROS2WheelAngularVelocityRightFront = ToRosVec(angVRF),
             // ROS2WheelQuaternionLeftFront = ToRosQuaternion(qLF),
             // ROS2WheelQuaternionRightFront = ToRosQuaternion(qRF),
-            ROS2MinRange = range,
-            // ROS2MinRangeDirection = ToRosVec(rangeDirection),
-            ROS2MinRangePosition = ToRosVec(rangeDirection),
+            ROS2Range = range.ToArray(),
+
+            ROS2RangePosition = rangeDirection.ToArray(),
             
 
         };
       
 
-        // (double, double, double) tmp = EulerFromQuaternion(baseLinkM.q);
-        // Vector3 tmp2 = new Vector3((float)tmp.Item1/DEG2RAD, (float)tmp.Item2/DEG2RAD, (float)tmp.Item3/DEG2RAD);
-        // Debug.Log("car before q " + tmp2);
-        // Vector3 tmp5 = baseLinkM.q.eulerAngles;
-        // Debug.Log("car before eu " + tmp5);
-        // (double, double, double) tmp3 = EulerFromQuaternion(baseLinkM.ROS2Quaternion);
-        // Vector3 tmp4 = new Vector3((float)tmp3.Item1/DEG2RAD, (float)tmp3.Item2/DEG2RAD, (float)tmp3.Item3/DEG2RAD);
-        // Debug.Log("car after " + tmp4);
 
-        // var tmp = wheelBaseM[0].theta.y / DEG2RAD;
-        // print("wheel angular v " + angVLB.x.ToString("F5"));
   
         return ROS2State;
     
