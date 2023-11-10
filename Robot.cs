@@ -72,6 +72,8 @@ public class Robot : MonoBehaviour
         // Vector3 angVRF = wheelM[3].AngularV;
         // Quaternion qLF = wheelBaseM[0].q;
         // Quaternion qRF = wheelBaseM[1].q;
+
+        
         List<float> range = lidar.GetRange();
         
         var rangeDirection = lidar.GetRangeDirection(); //list
