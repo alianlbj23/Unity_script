@@ -16,19 +16,7 @@ public class State
     // public Vector3 targetPosition { get; set; }
     // public Vector3 pathPositionClosest { get; set; }
     public Vector3 carPosition { get; set; }
-    // public Vector3 carVelocity { get; set; }
-    // public Vector3 carAugularVelocity { get; set; }
-    // public Quaternion carQuaternion { get; set; }
-    // public Vector3 wheelAngularVelocityLeftBack { get; set; }
-    // public Vector3 wheelAngularVelocityLeftFront { get; set; }
-    // public Vector3 wheelAngularVelocityRightBack { get; set; }
-    // public Vector3 wheelAngularVelocityRightFront { get; set; }
-    // public Quaternion wheelQuaternionLeftBack { get; set; }
-    // public Quaternion wheelQuaternionLeftFront { get; set; }
-    // public Quaternion wheelQuaternionRightBack { get; set; }
-    // public Quaternion wheelQuaternionRightFront { get; set; }
-    // public float minRange { get; set; }
-    // public Vector3 minRangeDirection { get; set; }
+    public float objectUpVector { get; set; }
 
     public Vector3 ROS2TargetPosition { get; set; } //3 4 5
     public Vector3 ROS2PathPositionClosest { get; set; }

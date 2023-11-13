@@ -63,6 +63,7 @@ public class Robot : MonoBehaviour
     public State GetState(Vector3 newTarget)
     {   
         Vector3 carPos = baseLinkM.x;
+        float objectUpVector;
         Vector3 carVel = baseLinkM.v;
         Vector3 carAngV = baseLinkM.AngularV;
         Quaternion carQ = baseLinkM.q;
@@ -84,7 +85,7 @@ public class Robot : MonoBehaviour
         State ROS2State = new State(){
 
             carPosition = carPos,
- 
+            objectUpVector = baseLinkM.objectUpVector,
 
             ROS2TargetPosition = ToRosVec(newTarget),
             ROS2PathPositionClosest = new Vector3(0,0,0),

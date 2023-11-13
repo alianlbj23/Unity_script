@@ -69,6 +69,7 @@ public class TrainingManager : MonoBehaviour
     public float currentStepTime = 0.0f;
 
     Vector3 newTarget;
+    Vector3 newTarget_car;
 
 
     public BezierCurve curver;
@@ -131,7 +132,8 @@ public class TrainingManager : MonoBehaviour
 
     float target_x;
     float target_y;
-    
+    float target_x_car;
+    float target_y_car;
     
     float target_change_flag = 0;
     
@@ -150,6 +152,7 @@ public class TrainingManager : MonoBehaviour
         
     
 
+    // 
     void change_target()
     {
         carPos = baselink.GetComponent<ArticulationBody>().transform.position;
@@ -159,27 +162,38 @@ public class TrainingManager : MonoBehaviour
             anchor3.transform.position,
             anchor4.transform.position
         };
-        newTarget = new Vector3(carPos[0]-20, 0, carPos[2]-20);
+        // -------------------------------------
+        target_x_car = Random.Range(-3.0f, 3.0f);
+        target_x_car = abs_biggerthan1(target_x_car);
 
+        target_y_car = Random.Range(-3.0f, 3.0f);
+        target_y_car = abs_biggerthan1(target_y_car);
+
+        newTarget_car = new Vector3(carPos[0] + target_x_car, carPos[1], carPos[2] + target_y_car);
+        while (!IsPointInsidePolygon(newTarget_car, outerPolygonVertices))
+        {
+            target_x_car = Random.Range(-3.0f, 3.0f);
+            target_x_car = abs_biggerthan1(target_x_car);
+            target_y_car = Random.Range(-3.0f, 3.0f);
+            target_y_car = abs_biggerthan1(target_y_car);
+            newTarget_car = new Vector3(carPos[0] + target_x_car, 0, carPos[2] + target_y_car);
+        }
+        // MoveGameObject(robot.GameObject, newTarget_car); // check
+        MoveRobot(newTarget_car);
+        // ------------------------------------------
+
+
+        target_x = Random.Range(-3.0f, 3.0f);
+        target_x = abs_biggerthan1(target_x);
+
+        target_y = Random.Range(-3.0f, 3.0f);
+        target_y = abs_biggerthan1(target_y);
+        newTarget = new Vector3(newTarget_car[0] + target_x, 0, newTarget_car[2] + target_y);
         while (!IsPointInsidePolygon(newTarget, outerPolygonVertices)){
             target_x = Random.Range(-3.0f, 3.0f);
-
-            if (target_x <= 1 && target_x >= -1) {
-                if (target_x > 0) {
-                    target_x += 1;
-                } else {
-                    target_x -= 1;
-                }
-            }
-
-            float target_y = Random.Range(-3.0f, 3.0f);
-            if (target_y <= 1 && target_y >= -1) {
-                if (target_y > 0) {
-                    target_y += 1;
-                } else {
-                    target_y -= 1;
-                }
-            }
+            target_x = abs_biggerthan1(target_x);
+            target_y = Random.Range(-3.0f, 3.0f);
+            target_y = abs_biggerthan1(target_y);
             newTarget = new Vector3(carPos[0]+target_x, 0, carPos[2]+target_y);
 
         }
@@ -187,11 +201,23 @@ public class TrainingManager : MonoBehaviour
         MoveGameObject(target, newTarget);
 
         State state = updateState(newTarget, curver);
+        Debug.Log("carPosition: "+state.carPosition);
         Debug.Log("ROS2TargetPosition: "+state.ROS2TargetPosition);
+        
         Send(state);
 
     }
-
+    private float abs_biggerthan1(float random)
+    {
+        if (random <= 1 && random >= -1) {
+                if (random > 0) {
+                    random += 1;
+                } else {
+                    random -= 1;
+                }
+            }
+        return random;
+    }
     private void OnWebSocketMessage(object sender, MessageEventArgs e)
     {
         string jsonString = e.Data;
@@ -207,10 +233,11 @@ public class TrainingManager : MonoBehaviour
                 Robot.Action action = new Robot.Action();
                 action.voltage = new List<float>();
 
-                action.voltage.Add((float)data[1]);
+                // action.voltage.Add((float)data[1]);
                 
+                // action.voltage.Add((float)data[2]);
+                action.voltage.Add((float)data[1]);
                 action.voltage.Add((float)data[2]);
-
                 robot.DoAction(action);
                 StartStep();
 
@@ -241,7 +268,7 @@ public class TrainingManager : MonoBehaviour
                 // }
                 target_change_flag = 1;
                 // Transform baselink = robot.transform.Find("base_link");
-                Debug.Log("new target: "+ newTarget);
+                // Debug.Log("new target: "+ newTarget);
                 // var carPos = baselink.GetComponent<ArticulationBody>().transform.position;
                 
                 

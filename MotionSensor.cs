@@ -11,6 +11,7 @@ public class MotionSensor : MonoBehaviour
 
     public Vector3 x { get { return transform.localPosition; } } //position
     public Vector3 theta { get { return transform.rotation.eulerAngles * DEG2RAD; } } //rotation angles
+    public float objectUpVector { get { return transform.up.y; } } 
     public Vector3 v { get { return bd.velocity; } }
     public Vector3 AngularV { get { return bd.transform.InverseTransformDirection(bd.angularVelocity); } } //radian
     // public Vector3 AngularV { get { return bd.angularVelocity; } } //radian
