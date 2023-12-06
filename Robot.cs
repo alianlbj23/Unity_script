@@ -6,41 +6,37 @@ using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Geometry;
 using System.Linq;
 
-public class Robot : MonoBehaviour
-{   
 
-    public struct Action {
+public class Robot : MonoBehaviour
+{
+    public struct Action
+    {
         public List<float> voltage;
     }
 
     public MotionSensor baseLinkM;
-    public List<MotionSensor>  wheelM;
+    public List<MotionSensor> wheelM;
 
     // List<Motor> motorList;
     List<MotorMoveForward> motorListMF;
 
     public TrailRenderer trailRenderer;
 
-
     //test
     public Vector3 rot;
 
     public State ROS2State;
 
-
     Vector3 targetPosition;
 
-
     const float DEG2RAD = 0.01745329251f;
-
 
     public LidarSensor lidar;
 
     void Awake()
-    {   
+    {
         baseLinkM = Util.GetOrAddComponent<MotionSensor>(transform, "base_link");
-        
-        
+
         wheelM = new List<MotionSensor>() {
             Util.GetOrAddComponent<MotionSensor>(transform, "left_back_forward_wheel"),
             // Util.GetOrAddComponent<MotionSensor>(transform, "left_front_forward_wheel"),
@@ -54,14 +50,12 @@ public class Robot : MonoBehaviour
             Util.GetOrAddComponent<MotorMoveForward>(transform, "right_back_forward_wheel"),
             // Util.GetOrAddComponent<MotorMoveForward>(transform, "right_front_forward_wheel"),
         };
-   
 
-    
         trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
 
     public State GetState(Vector3 newTarget)
-    {   
+    {
         Vector3 carPos = baseLinkM.x;
         float objectUpVector;
         Vector3 carVel = baseLinkM.v;
@@ -74,23 +68,23 @@ public class Robot : MonoBehaviour
         // Quaternion qLF = wheelBaseM[0].q;
         // Quaternion qRF = wheelBaseM[1].q;
 
-        
         List<float> range = lidar.GetRange();
-        
+
         var rangeDirection = lidar.GetRangeDirection(); //list
-        for(int i = 0; i < rangeDirection.Count; i++){
+        for (int i = 0; i < rangeDirection.Count; i++)
+        {
             rangeDirection[i] = ToRosVec(rangeDirection[i]);
         }
-        
-        State ROS2State = new State(){
 
+        State ROS2State = new State()
+        {
             carPosition = carPos,
             objectUpVector = baseLinkM.objectUpVector,
 
             ROS2TargetPosition = ToRosVec(newTarget),
-            ROS2PathPositionClosest = new Vector3(0,0,0),
-            ROS2PathPositionSecondClosest = new Vector3(0,0,0),
-            ROS2PathPositionFarthest = new Vector3(0,0,0),
+            ROS2PathPositionClosest = new Vector3(0, 0, 0),
+            ROS2PathPositionSecondClosest = new Vector3(0, 0, 0),
+            ROS2PathPositionFarthest = new Vector3(0, 0, 0),
             ROS2CarPosition = ToRosVec(carPos),
             ROS2CarVelocity = ToRosVec(carVel),
             ROS2CarAugularVelocity = ToRosVec(carAngV),
@@ -104,18 +98,11 @@ public class Robot : MonoBehaviour
             ROS2Range = range.ToArray(),
 
             ROS2RangePosition = rangeDirection.ToArray(),
-            
-
         };
-      
-
-
-  
         return ROS2State;
-    
     }
 
-    public State UpdatePath(State state, Vector3 p0, Vector3 p1, Vector3 p2) 
+    public State UpdatePath(State state, Vector3 p0, Vector3 p1, Vector3 p2)
     {
         state.ROS2PathPositionClosest = ToRosVec(p0);
         state.ROS2PathPositionSecondClosest = ToRosVec(p1);
@@ -124,16 +111,13 @@ public class Robot : MonoBehaviour
         return state;
     }
 
-    
-
     public void DoAction(Action action)
-    {   
+    {
         ////rear engine
         // motorListMF[0].SetVoltage(action[0]);
         // motorListMF[1].SetVoltage(action[1]);
-        
+
         motorListMF[0].SetVoltage((float)action.voltage[0]);
-        
         motorListMF[1].SetVoltage((float)action.voltage[1]);
     }
 
@@ -142,8 +126,8 @@ public class Robot : MonoBehaviour
         Vector2 v = targetPos - pos;
         Vector2 up = new Vector2(0, 1);
         float rad = getAngle(v, up);
-        if(v[0] < 0)
-            rad = Mathf.PI*2 - rad;
+        if (v[0] < 0)
+            rad = Mathf.PI * 2 - rad;
         return rad;
     }
 
@@ -194,20 +178,15 @@ public class Robot : MonoBehaviour
         return position;
     }
 
-    Quaternion ToRosQuaternion(Quaternion quaternion) 
-    {   
+    Quaternion ToRosQuaternion(Quaternion quaternion)
+    {
         // Debug.Log("before " + quaternion.ToString("F5"));
 
         QuaternionMsg ROS2Quaternion = quaternion.To<FLU>();
         quaternion = new Quaternion((float)ROS2Quaternion.x, (float)ROS2Quaternion.y, (float)ROS2Quaternion.z, (float)ROS2Quaternion.w);
         // Debug.Log("after " + quaternion.ToString("F5"));
 
-        quaternion.To<FLU>();   
+        quaternion.To<FLU>();
         return quaternion;
     }
-
-
-
-
-
 }

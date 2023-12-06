@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class MotorSteering : MonoBehaviour
 {
     ArticulationBody bd;
@@ -15,26 +16,27 @@ public class MotorSteering : MonoBehaviour
     void Awake()
     {
         bd = GetComponent<ArticulationBody>();
-        
-
     }
 
     public void SetAngle(float targetRadian)
-    {   
+    {
         ArticulationDrive currentDrive = bd.xDrive;
 
         float targetAngle = targetRadian * RAD2DEG;
         // print("target " + targetAngle);
         // targetAngle = (targetAngle + 360) % 360;
-        
+
         // float currAngle = transform.rotation.eulerAngles[1];
         // if (currAngle > 358 || currAngle < 2) currAngle = 0;
 
-        float newTargetDelta; 
+        float newTargetDelta;
 
-        if(currentDrive.target < targetAngle) { //positive clockwise //currAngle
+        if (currentDrive.target < targetAngle) //positive clockwise //currAngle
+        {
             newTargetDelta = 1 * Time.fixedDeltaTime * speed;
-        } else {
+        }
+        else
+        {
             newTargetDelta = -1 * Time.fixedDeltaTime * speed;
         }
         // Debug.Log("target angle: " + targetAngle);
@@ -44,7 +46,7 @@ public class MotorSteering : MonoBehaviour
 
         // Debug.Log(currentDrive.upperLimit);
         // Debug.Log(currentDrive.lowerLimit);
-   
+
         if (newTargetDelta + currentDrive.target > currentDrive.upperLimit)
         {
             currentDrive.target = currentDrive.upperLimit;
@@ -59,19 +61,15 @@ public class MotorSteering : MonoBehaviour
         }
 
         // currentDrive.target += newTargetDelta;
-        
-    
-
         // Debug.Log("later target: " + currentDrive.target);
-                
-        bd.xDrive = currentDrive;
 
+        bd.xDrive = currentDrive;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+
+
 public class State
-{   
- 
+{
     // public Dictionary<string, Vector3> targetPosition { get; set; }
     // public Dictionary<string, Vector3> pathPosition { get; set; }
     // public Dictionary<string, Vector3> carPosition { get; set; }
@@ -38,23 +39,21 @@ public class State
     public float[] ROS2Range { get; set; }
     // public Vector3 ROS2MinRangeDirection { get; set; }
     public Vector3[] ROS2RangePosition { get; set; }
-    
-    
 
     void Awake()
     {
-        
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -5,12 +5,12 @@ using UnityEngine;
 
 
 public class LidarSensor : MonoBehaviour
-{   
+{
     public float RangeMetersMin = 0.10f; // 0
     public float RangeMetersMax = 100; // 1000
-    float ScanAngleStartDegrees = 0; //-45
-    float ScanAngleEndDegrees = -359; //45
-    public int NumMeasurementsPerScan = 180; //10
+    float ScanAngleStartDegrees = 0; // -45
+    float ScanAngleEndDegrees = -359; // 45
+    public int NumMeasurementsPerScan = 180; // 10
 
     List<float> ranges = new List<float>();
     List<float> range_tmp = new List<float>();
@@ -19,12 +19,12 @@ public class LidarSensor : MonoBehaviour
     int m_NumMeasurementsTaken;
     bool isScanning = false;
 
-   float GetMinRangeFlag = 0;
+    float GetMinRangeFlag = 0;
 
     List<Vector3> directionVectors = new List<Vector3>();
     List<Vector3> directionVectors_tmp = new List<Vector3>();
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,22 +55,17 @@ public class LidarSensor : MonoBehaviour
         ranges.Clear();
         directionVectors.Clear();
         isScanning = false;
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        
         if (!isScanning)
         {
-
             BeginScan();
         }
 
-
         var measurementsSoFar = NumMeasurementsPerScan; //180
-
         var yawBaseDegrees = transform.rotation.eulerAngles.y;
         while (m_NumMeasurementsTaken < measurementsSoFar)
         {
@@ -83,22 +78,18 @@ public class LidarSensor : MonoBehaviour
             var foundValidMeasurement = Physics.Raycast(measurementRay, out var hit, RangeMetersMax); //Returns whether an object was detected
             // Only record measurement if it's within the sensor's operating range
             if (foundValidMeasurement)
-            {   
+            {
                 ranges.Add(hit.distance); //object distance
             }
             else
             {
                 ranges.Add(100.0f);
             }
-
             // Even if Raycast didn't find a valid hit, we still count it as a measurement
             ++m_NumMeasurementsTaken;
-            directionVectors.Add(directionVector);            
+            directionVectors.Add(directionVector);
         }
-        
 
-        
-        
         if (m_NumMeasurementsTaken >= NumMeasurementsPerScan)
         {
             if (m_NumMeasurementsTaken > NumMeasurementsPerScan)
@@ -107,37 +98,23 @@ public class LidarSensor : MonoBehaviour
             }
             EndScan();
         }
-
-        
-        
-
-        
     }
 
 
-    public List<float> GetRange() 
-    {   
-
+    public List<float> GetRange()
+    {
         // return minRange;
         return range_tmp;
     }
 
-    
-
-    public List<Vector3> GetRangeDirection() 
-    {   
-        
+    public List<Vector3> GetRangeDirection()
+    {
         // return minDirectionVector;
-        
         return directionVectors_tmp;
     }
 
-    public int GetRangeSize() 
-    {  
+    public int GetRangeSize()
+    {
         return m_NumMeasurementsTaken;
-
     }
-
-
-
 }

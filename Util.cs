@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Util : MonoBehaviour
 {
     public static T GetOrAddComponent<T>(Transform transform, string childName) where T : Component
     {
         var res = RecursiveFindChild(transform, childName).GetComponent<T>();
-        if (res != null) {
+        if (res != null)
+        {
             return res;
         }
 
@@ -16,12 +18,17 @@ public class Util : MonoBehaviour
 
     public static Transform RecursiveFindChild(Transform parent, string childName)
     {
-        foreach (Transform child in parent) {
-            if (child.name == childName) {
+        foreach (Transform child in parent)
+        {
+            if (child.name == childName)
+            {
                 return child;
-            } else {
+            }
+            else
+            {
                 Transform found = RecursiveFindChild(child, childName);
-                if (found != null) {
+                if (found != null)
+                {
                     return found;
                 }
             }
