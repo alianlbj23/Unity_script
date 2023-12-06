@@ -409,8 +409,7 @@ public class TrainingManager : MonoBehaviour
         // Transform baselink = robot.transform.Find("base_link");
         base_footprint.GetComponent<ArticulationBody>().TeleportRoot(pos, Quaternion.identity);
     }
-
-    State UpdatePath(BezierCurve curver, State state)
+    State UpdatePath(BezierCurve curver, State state) // delete it 
     {
         float minDist = 100000.0f;
         int closestIndex = 0;
@@ -448,7 +447,7 @@ public class TrainingManager : MonoBehaviour
 
         }
 
-        state = robot.UpdatePath(state, p0, p1, p2);
+        state = robot.UpdatePath(state, p0, p1, p2); // delete it
 
         trailClosest.transform.position = p0;
         trailSecond.transform.position = p1;
@@ -474,7 +473,7 @@ public class TrainingManager : MonoBehaviour
         System.Type type = state.GetType();
         // FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
 
-        state = UpdatePath(curver, state);
+        state = UpdatePath(curver, state); // delete it
 
         return state;
     }
