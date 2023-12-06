@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-@id: ms - dotnettools.csdevkitpublic class MotionSensor : MonoBehaviour
+public class MotionSensor : MonoBehaviour
 {
     const float DEG2RAD = 0.01745329251f;
     ArticulationBody bd;
