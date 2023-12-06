@@ -6,16 +6,6 @@ using Newtonsoft.Json;
 
 public class State
 {
-    // public Dictionary<string, Vector3> targetPosition { get; set; }
-    // public Dictionary<string, Vector3> pathPosition { get; set; }
-    // public Dictionary<string, Vector3> carPosition { get; set; }
-    // public Dictionary<string, Vector3> carVelocity { get; set; }
-    // public Dictionary<string, Vector3> carAugularVelocity { get; set; }
-    // public Dictionary<string, Quaternion> carQuaternion { get; set; }
-    // public Dictionary<string, Vector3> wheelAngularVelocity { get; set; }
-    // public Dictionary<string, Quaternion> wheelQuaternion { get; set; }
-    // public Vector3 targetPosition { get; set; }
-    // public Vector3 pathPositionClosest { get; set; }
     public Vector3 carPosition { get; set; }
     public float objectUpVector { get; set; }
 
