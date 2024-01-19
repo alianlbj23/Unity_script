@@ -54,7 +54,7 @@ public class Robot : MonoBehaviour
         trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
 
-    public State GetState(Vector3 newTarget)
+    public State GetState(Vector3 newTarget, bool isFirst)
     {
         Vector3 carPos = baseLinkM.x;
         float objectUpVector;
@@ -96,7 +96,7 @@ public class Robot : MonoBehaviour
             // ROS2WheelQuaternionLeftFront = ToRosQuaternion(qLF),
             // ROS2WheelQuaternionRightFront = ToRosQuaternion(qRF),
             ROS2Range = range.ToArray(),
-
+            isFirst = isFirst,
             ROS2RangePosition = rangeDirection.ToArray(),
         };
         return ROS2State;

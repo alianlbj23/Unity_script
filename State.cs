@@ -39,6 +39,7 @@ public class State
     public float[] ROS2Range { get; set; }
     // public Vector3 ROS2MinRangeDirection { get; set; }
     public Vector3[] ROS2RangePosition { get; set; }
+    public bool isFirst { get; set; }
 
     void Awake()
     {

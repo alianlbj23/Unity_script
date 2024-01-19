@@ -16,8 +16,8 @@ using MiniJSON;
 
 public class TrainingManager : MonoBehaviour
 {
-    string topicName = "/unity2Ros";
-    string topicName_receive = "/ros2Unity";
+    string topicName = "/Unity2Trainer";
+    string topicName_receive = "/Trainer2Unity";
 
     private WebSocket socket;
     private string rosbridgeServerUrl = "ws://localhost:9090";
@@ -114,7 +114,7 @@ public class TrainingManager : MonoBehaviour
         socket.OnMessage += OnWebSocketMessage;
         socket.Connect();
         MoveGameObject(target, newTarget);
-        State state = updateState(newTarget, curver);
+        State state = updateState(newTarget, curver, true);
         Send(state);
     }
 
@@ -181,7 +181,7 @@ public class TrainingManager : MonoBehaviour
         // Debug.Log("newTarget: "+newTarget);
         MoveGameObject(target, newTarget);
 
-        State state = updateState(newTarget, curver);
+        State state = updateState(newTarget, curver, false);
         Debug.Log("carPosition: " + state.carPosition);
         Debug.Log("ROS2TargetPosition: " + state.ROS2TargetPosition);
 
@@ -291,7 +291,7 @@ public class TrainingManager : MonoBehaviour
     void EndStep()
     {
         phase = Phase.Freeze;
-        State state = updateState(newTarget, curver);
+        State state = updateState(newTarget, curver, false);
         Send(state);
 
         // Debug.Log(state.carPosition);
@@ -331,35 +331,6 @@ public class TrainingManager : MonoBehaviour
     {
         // List<float> send_to_python = new List<float>();
         var properties = typeof(State).GetProperties();
-        // foreach (var property in properties)
-        // {
-        //     if (property.PropertyType == typeof(Vector3) || property.PropertyType == typeof(Quaternion) || property.PropertyType == typeof(float))
-        //     {
-        //         var value = property.GetValue(data);
-
-        //         if (property.PropertyType == typeof(Vector3))
-        //         {
-        //             var vector3Value = (Vector3)value;
-        //             send_to_python.Add(vector3Value.x);
-        //             send_to_python.Add(vector3Value.y);
-        //             send_to_python.Add(vector3Value.z);
-        //         }
-        //         // 如果值是 Quaternion，将其分解为 x、y、z、w
-        //         else if (property.PropertyType == typeof(Quaternion))
-        //         {
-        //             var quaternionValue = (Quaternion)value;
-        //             send_to_python.Add(quaternionValue.x);
-        //             send_to_python.Add(quaternionValue.y);
-        //             send_to_python.Add(quaternionValue.z);
-        //             send_to_python.Add(quaternionValue.w);
-        //         }
-        //         // 如果值是 float，直接添加到列表中
-        //         else if (property.PropertyType == typeof(float))
-        //         {
-        //             send_to_python.Add((float)value);
-        //         }
-        //     }
-        // }
 
         Dictionary<string, object> stateDict = new Dictionary<string, object>();
 
@@ -396,6 +367,7 @@ public class TrainingManager : MonoBehaviour
         {
             Debug.Log("error-send");
         }
+        Debug.Log("print");
     }
 
     void MoveGameObject(GameObject obj, Vector3 pos)
@@ -468,9 +440,9 @@ public class TrainingManager : MonoBehaviour
         // MoveGameObject(obstacle2, pos1);
     }
 
-    State updateState(Vector3 newTarget, BezierCurve curver)
+    State updateState(Vector3 newTarget, BezierCurve curver, bool isFirst)
     {
-        State state = robot.GetState(newTarget);
+        State state = robot.GetState(newTarget, isFirst);
         System.Type type = state.GetType();
         // FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
 
