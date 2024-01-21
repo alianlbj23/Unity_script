@@ -57,16 +57,11 @@ public class Robot : MonoBehaviour
     public State GetState(Vector3 newTarget, bool isFirst)
     {
         Vector3 carPos = baseLinkM.x;
-        float objectUpVector;
         Vector3 carVel = baseLinkM.v;
         Vector3 carAngV = baseLinkM.AngularV;
         Quaternion carQ = baseLinkM.q;
         Vector3 angVLB = wheelM[0].AngularV;
-        // Vector3 angVLF = wheelM[1].AngularV;
         Vector3 angVRB = wheelM[1].AngularV;
-        // Vector3 angVRF = wheelM[3].AngularV;
-        // Quaternion qLF = wheelBaseM[0].q;
-        // Quaternion qRF = wheelBaseM[1].q;
 
         List<float> range = lidar.GetRange();
 
@@ -79,22 +74,15 @@ public class Robot : MonoBehaviour
         State ROS2State = new State()
         {
             carPosition = carPos,
-            objectUpVector = baseLinkM.objectUpVector,
 
             ROS2TargetPosition = ToRosVec(newTarget),
-            ROS2PathPositionClosest = new Vector3(0, 0, 0),
-            ROS2PathPositionSecondClosest = new Vector3(0, 0, 0),
-            ROS2PathPositionFarthest = new Vector3(0, 0, 0),
             ROS2CarPosition = ToRosVec(carPos),
             ROS2CarVelocity = ToRosVec(carVel),
             ROS2CarAugularVelocity = ToRosVec(carAngV),
             ROS2CarQuaternion = ToRosQuaternion(carQ),
             ROS2WheelAngularVelocityLeftBack = ToRosVec(angVLB),
-            // ROS2WheelAngularVelocityLeftFront = ToRosVec(angVLF),
             ROS2WheelAngularVelocityRightBack = ToRosVec(angVRB),
-            // ROS2WheelAngularVelocityRightFront = ToRosVec(angVRF),
-            // ROS2WheelQuaternionLeftFront = ToRosQuaternion(qLF),
-            // ROS2WheelQuaternionRightFront = ToRosQuaternion(qRF),
+
             ROS2Range = range.ToArray(),
             isFirst = isFirst,
             ROS2RangePosition = rangeDirection.ToArray(),
@@ -102,21 +90,8 @@ public class Robot : MonoBehaviour
         return ROS2State;
     }
 
-    public State UpdatePath(State state, Vector3 p0, Vector3 p1, Vector3 p2)
-    {
-        state.ROS2PathPositionClosest = ToRosVec(p0);
-        state.ROS2PathPositionSecondClosest = ToRosVec(p1);
-        state.ROS2PathPositionFarthest = ToRosVec(p2);
-
-        return state;
-    }
-
     public void DoAction(Action action)
     {
-        ////rear engine
-        // motorListMF[0].SetVoltage(action[0]);
-        // motorListMF[1].SetVoltage(action[1]);
-
         motorListMF[0].SetVoltage((float)action.voltage[0]);
         motorListMF[1].SetVoltage((float)action.voltage[1]);
     }
@@ -170,21 +145,17 @@ public class Robot : MonoBehaviour
 
     Vector3 ToRosVec(Vector3 position)
     {
-        // Debug.Log("before " + position.ToString("F5"));
         PointMsg ROS2Position = position.To<FLU>();
         position = new Vector3((float)ROS2Position.x, (float)ROS2Position.y, (float)ROS2Position.z);
-        // Debug.Log("after " + position.ToString("F5"));
 
         return position;
     }
 
     Quaternion ToRosQuaternion(Quaternion quaternion)
     {
-        // Debug.Log("before " + quaternion.ToString("F5"));
-
         QuaternionMsg ROS2Quaternion = quaternion.To<FLU>();
         quaternion = new Quaternion((float)ROS2Quaternion.x, (float)ROS2Quaternion.y, (float)ROS2Quaternion.z, (float)ROS2Quaternion.w);
-        // Debug.Log("after " + quaternion.ToString("F5"));
+
 
         quaternion.To<FLU>();
         return quaternion;

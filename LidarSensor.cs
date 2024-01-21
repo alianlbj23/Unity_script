@@ -19,8 +19,6 @@ public class LidarSensor : MonoBehaviour
     int m_NumMeasurementsTaken;
     bool isScanning = false;
 
-    float GetMinRangeFlag = 0;
-
     List<Vector3> directionVectors = new List<Vector3>();
     List<Vector3> directionVectors_tmp = new List<Vector3>();
 
