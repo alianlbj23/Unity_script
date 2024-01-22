@@ -35,9 +35,8 @@ public class State
     public Quaternion ROS2WheelQuaternionLeftFront { get; set; }
     public Quaternion ROS2WheelQuaternionRightBack { get; set; }
     public Quaternion ROS2WheelQuaternionRightFront { get; set; }
-    // public float ROS2MinRange { get; set; }
+
     public float[] ROS2Range { get; set; }
-    // public Vector3 ROS2MinRangeDirection { get; set; }
     public Vector3[] ROS2RangePosition { get; set; }
     public bool isFirst { get; set; }
 

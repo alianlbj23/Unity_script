@@ -36,19 +36,16 @@ public class Robot : MonoBehaviour
     void Awake()
     {
         baseLinkM = Util.GetOrAddComponent<MotionSensor>(transform, "base_link");
-
         wheelM = new List<MotionSensor>() {
             Util.GetOrAddComponent<MotionSensor>(transform, "left_back_forward_wheel"),
-            // Util.GetOrAddComponent<MotionSensor>(transform, "left_front_forward_wheel"),
             Util.GetOrAddComponent<MotionSensor>(transform, "right_back_forward_wheel"),
-            // Util.GetOrAddComponent<MotionSensor>(transform, "right_front_forward_wheel")
         };
 
         motorListMF = new List<MotorMoveForward>() {
             Util.GetOrAddComponent<MotorMoveForward>(transform, "left_back_forward_wheel"),
-            // Util.GetOrAddComponent<MotorMoveForward>(transform, "left_front_forward_wheel"),
+            Util.GetOrAddComponent<MotorMoveForward>(transform, "left_front_forward_wheel"),
             Util.GetOrAddComponent<MotorMoveForward>(transform, "right_back_forward_wheel"),
-            // Util.GetOrAddComponent<MotorMoveForward>(transform, "right_front_forward_wheel"),
+            Util.GetOrAddComponent<MotorMoveForward>(transform, "right_front_forward_wheel"),
         };
 
         trailRenderer = GetComponentInChildren<TrailRenderer>();
@@ -93,7 +90,9 @@ public class Robot : MonoBehaviour
     public void DoAction(Action action)
     {
         motorListMF[0].SetVoltage((float)action.voltage[0]);
-        motorListMF[1].SetVoltage((float)action.voltage[1]);
+        motorListMF[1].SetVoltage((float)action.voltage[0]);
+        motorListMF[2].SetVoltage((float)action.voltage[1]);
+        motorListMF[3].SetVoltage((float)action.voltage[1]);
     }
 
     public float getTargetAngle(Vector2 pos, Vector2 targetPos)

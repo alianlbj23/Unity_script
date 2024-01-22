@@ -182,10 +182,7 @@ public class TrainingManager : MonoBehaviour
     private void OnWebSocketMessage(object sender, MessageEventArgs e)
     {
         string jsonString = e.Data;
-
         RobotNewsMessage message = JsonUtility.FromJson<RobotNewsMessage>(jsonString);
-
-
         float[] data = message.msg.data;
 
         switch (data[0])
@@ -239,9 +236,7 @@ public class TrainingManager : MonoBehaviour
     void Send(object data)
     {
         var properties = typeof(State).GetProperties();
-
         Dictionary<string, object> stateDict = new Dictionary<string, object>();
-
         foreach (var property in properties)
         {
             string propertyName = property.Name;
@@ -250,7 +245,6 @@ public class TrainingManager : MonoBehaviour
         }
 
         string dictData = MiniJSON.Json.Serialize(stateDict);
-
         Dictionary<string, object> message = new Dictionary<string, object>
         {
             { "op", "publish" },
