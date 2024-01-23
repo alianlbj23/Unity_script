@@ -84,8 +84,10 @@ public class TrainingManager : MonoBehaviour
         base_footprint = robot.transform.Find("base_link");
     }
 
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitForSeconds(1);
+
         baselink = robot.transform.Find("base_link");
         socket = new WebSocket(rosbridgeServerUrl);
         socket.OnOpen += (sender, e) =>
